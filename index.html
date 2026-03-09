@@ -11,7 +11,7 @@
         body {
             margin: 0; padding: 0;
             font-family: 'Inter', sans-serif;
-            background-color: #0e1117; /* Streamlit dark mode background */
+            background-color: #0e1117; 
             color: #fafafa;
             display: flex;
             overflow-x: hidden;
@@ -19,6 +19,24 @@
         hr { border: 0; border-top: 1px solid #3a3a55; margin: 30px 0; }
         a { color: #4facfe; text-decoration: none; }
         
+        /* --- MOBILE TOGGLE BUTTON --- */
+        .mobile-toggle {
+            display: none; 
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            background: linear-gradient(45deg, #8A2387, #E94057);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
         /* --- LAYOUT: SIDEBAR & MAIN CONTENT --- */
         .sidebar {
             width: 320px;
@@ -28,12 +46,15 @@
             position: fixed;
             overflow-y: auto;
             border-right: 1px solid #3a3a55;
+            transition: left 0.4s ease; 
+            z-index: 999;
         }
         .main-content {
             margin-left: 320px;
             padding: 50px;
             width: calc(100% - 320px);
             min-height: 100vh;
+            transition: margin-left 0.4s ease, width 0.4s ease;
         }
 
         /* --- SIDEBAR NAVIGATION CSS --- */
@@ -44,8 +65,7 @@
         .nav-menu li {
             background: rgba(30, 30, 47, 0.4); border: 1px solid #3a3a55; border-radius: 12px;
             padding: 15px 15px 15px 60px; margin-bottom: 10px; position: relative; cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600; color: #A0AEC0;
+            transition: all 0.3s ease; font-weight: 600; color: #A0AEC0;
         }
         .nav-menu li:hover, .nav-menu li.active {
             transform: scale(1.03) translateX(5px);
@@ -59,13 +79,11 @@
         }
         .nav-menu li:hover::before, .nav-menu li.active::before { transform: translateY(-50%) scale(1.2) rotate(5deg); }
         
-        /* Sidebar Icons */
         .nav-home::before { background-image: url('https://cdn-icons-png.flaticon.com/512/1946/1946488.png'); }
         .nav-ai::before { background-image: url('https://cdn-icons-png.flaticon.com/512/2083/2083213.png'); }
         .nav-video::before { background-image: url('https://cdn-icons-png.flaticon.com/512/3112/3112521.png'); }
         .nav-chat::before { background-image: url('https://cdn-icons-png.flaticon.com/512/4712/4712035.png'); }
 
-        /* Social Links & Resume Button */
         .social-link {
             display: flex; align-items: center; padding: 10px 15px; margin-bottom: 12px;
             background: rgba(30, 30, 47, 0.4); border: 1px solid #3a3a55; border-radius: 10px;
@@ -77,12 +95,6 @@
             color: #ffffff !important; box-shadow: 0 4px 15px rgba(233, 64, 87, 0.3);
         }
         .social-link:hover img { transform: scale(1.2) rotate(10deg); }
-        .download-btn {
-            display: block; text-align: center; background: linear-gradient(45deg, #8A2387, #E94057, #F27121);
-            color: white !important; padding: 12px; border-radius: 25px; font-weight: 800; font-size: 1.05rem; 
-            margin-top: 20px; transition: all 0.3s ease; border: 2px solid transparent;
-        }
-        .download-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(233, 64, 87, 0.7); }
         .connect-title { color: #ffffff; font-weight: 800; font-size: 1.2rem; margin-top: 20px; margin-bottom: 15px; }
 
         /* --- PAGE SECTIONS --- */
@@ -112,11 +124,45 @@
         .hero-subtitle { font-size: clamp(1.2rem, 4vw, 1.5rem); font-weight: 400; color: #A0AEC0; margin-bottom: 25px; }
         .hero-text { font-size: 1.1rem; color: #f7f7f7; max-width: 850px; margin: 0 auto; line-height: 1.7; padding: 0 15px; }
 
-        /* --- CERTIFICATES & COLUMNS --- */
-        .two-cols { display: flex; gap: 30px; margin-bottom: 20px; }
-        .two-cols > div { flex: 1; }
-        .cert-img { width: 100%; border-radius: 10px; border: 1px solid #3a3a55; }
-        .cert-caption { text-align: center; color: #A0AEC0; font-size: 0.9rem; margin-top: 8px; }
+        /* --- UPGRADED BIG ANIMATED CERTIFICATE --- */
+        .cert-container {
+            max-width: 850px; /* Made the certificate much larger */
+            margin: 40px auto;
+            text-align: center;
+            padding: 20px;
+        }
+        .cert-img { 
+            width: 100%; 
+            border-radius: 15px; 
+            border: 2px solid #3a3a55; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy smooth transition */
+            animation: subtleFloat 6s ease-in-out infinite; /* Continuous floating effect */
+            cursor: pointer;
+        }
+        /* Hover Effect for Certificate */
+        .cert-img:hover {
+            transform: scale(1.05) translateY(-10px);
+            border-color: #E94057;
+            box-shadow: 0 20px 40px rgba(233, 64, 87, 0.4), 0 0 20px rgba(233, 64, 87, 0.2);
+            animation-play-state: paused; /* Pauses float when hovered */
+        }
+        /* Floating Animation */
+        @keyframes subtleFloat {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
+            100% { transform: translateY(0px); }
+        }
+        .cert-caption { 
+            color: #ffffff; 
+            font-size: 1.3rem; 
+            margin-top: 25px; 
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: -webkit-linear-gradient(45deg, #E94057, #F27121);
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+        }
 
         /* --- TECHNICAL ARSENAL CARDS --- */
         .vertical-card {
@@ -144,22 +190,6 @@
         .tech-text-item { color: #A0AEC0; font-size: 1rem; display: inline-block; transition: color 0.3s ease; }
         .vertical-card:hover .tech-text-item { color: #ffffff; }
 
-        /* --- GET IN TOUCH FORM --- */
-        .contact-form-container {
-            background: linear-gradient(145deg, #1e1e2f, #2a2a40); padding: 40px; border-radius: 15px;
-            border: 1px solid #3a3a55; max-width: 800px; margin: 0 auto; width: 100%;
-        }
-        input[type=text], input[type=email], textarea {
-            width: 100%; padding: 12px; border: 1px solid #3a3a55; border-radius: 8px; box-sizing: border-box;
-            margin-top: 6px; margin-bottom: 16px; resize: vertical; background-color: rgba(30, 30, 47, 0.6);
-            color: white; font-family: 'Inter', sans-serif;
-        }
-        input:focus, textarea:focus { outline: none; border-color: #E94057; }
-        input[type=submit] {
-            background: linear-gradient(45deg, #8A2387, #E94057, #F27121); color: white; padding: 12px 25px;
-            border: none; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1.1rem;
-        }
-
         /* --- CHATBOT UI --- */
         .chat-container {
             background: rgba(30, 30, 47, 0.4); border: 1px solid #3a3a55; border-radius: 15px;
@@ -168,24 +198,44 @@
         .chat-message { margin-bottom: 15px; display: flex; flex-direction: column; }
         .chat-message.user { align-items: flex-end; }
         .chat-message.bot { align-items: flex-start; }
-        .chat-bubble {
-            padding: 12px 18px; border-radius: 20px; max-width: 80%; line-height: 1.5;
-        }
+        .chat-bubble { padding: 12px 18px; border-radius: 20px; max-width: 80%; line-height: 1.5; }
         .user .chat-bubble { background: #E94057; color: white; border-bottom-right-radius: 5px; }
         .bot .chat-bubble { background: #2a2a40; color: white; border-bottom-left-radius: 5px; border: 1px solid #3a3a55; }
         .chat-input-area { display: flex; gap: 10px; }
-        .chat-input-area input { margin-bottom: 0; flex-grow: 1; }
+        .chat-input-area input {
+            width: 100%; padding: 12px; border: 1px solid #3a3a55; border-radius: 8px; box-sizing: border-box;
+            background-color: rgba(30, 30, 47, 0.6); color: white; font-family: 'Inter', sans-serif; flex-grow: 1;
+        }
+        .chat-input-area input:focus { outline: none; border-color: #E94057; }
         .chat-input-area button {
             background: #E94057; color: white; border: none; padding: 0 25px; border-radius: 8px;
-            cursor: pointer; font-weight: bold; font-family: 'Inter';
+            cursor: pointer; font-weight: bold; font-family: 'Inter'; transition: all 0.3s ease;
+        }
+        .chat-input-area button:hover {
+            transform: translateY(-2px); box-shadow: 0 5px 15px rgba(233, 64, 87, 0.4);
         }
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        /* ========================================= */
+        /* 📱 MOBILE RESPONSIVENESS (OFF-CANVAS MENU)*/
+        /* ========================================= */
         @media (max-width: 900px) {
+            .mobile-toggle { display: block; } 
+            
             body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; position: relative; padding: 20px; }
-            .main-content { margin-left: 0; width: 100%; padding: 20px; }
-            .two-cols { flex-direction: column; }
+            
+            .sidebar { 
+                left: -320px; 
+                top: 0;
+                box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+            }
+            
+            .sidebar.active-mobile { left: 0; }
+            
+            .main-content { 
+                margin-left: 0; 
+                width: 100%; 
+                padding: 70px 20px 20px 20px; 
+            }
             
             .vertical-card { flex-direction: column; text-align: center; padding: 25px 15px; }
             .vertical-card .tech-img { margin: 0 auto 20px auto; display: block; }
@@ -193,7 +243,7 @@
             .hide-mobile { display: none; }
             
             .hero-image { width: 150px; height: 150px; }
-            .contact-form-container { padding: 20px 15px; }
+            .cert-container { padding: 10px; } /* Slightly less padding on mobile */
         }
         
         iframe { width: 100%; aspect-ratio: 16/9; border: none; border-radius: 10px; }
@@ -202,7 +252,9 @@
 </head>
 <body>
 
-    <nav class="sidebar">
+    <button class="mobile-toggle" onclick="toggleSidebar()" id="menuBtn">☰</button>
+
+    <nav class="sidebar" id="sidebar">
         <img src="https://cdn-icons-png.flaticon.com/512/1146/1146200.png" alt="Logo" class="sidebar-logo">
         <div class="sidebar-title">Navigation</div>
         
@@ -228,9 +280,6 @@
         <a href="https://youtube.com/@TheWonderWhy" target="_blank" class="social-link">
             <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"> The Wonder Why
         </a>
-        
-        <hr style="border-color: #3a3a55; margin-top: 25px;">
-        <a href="#" class="download-btn">📄 Download Resume</a>
     </nav>
 
     <main class="main-content">
@@ -251,15 +300,10 @@
             <hr>
             
             <h2>🏆 Certifications & Achievements</h2>
-            <div class="two-cols">
-                <div>
-                    <img src="cert1.png" alt="AI Certification" class="cert-img" onerror="this.src='https://via.placeholder.com/600x400?text=Upload+cert1.png'">
-                    <div class="cert-caption">Advanced AI & Prompt Engineering</div>
-                </div>
-                <div>
-                    <img src="cert2.png" alt="Video Certification" class="cert-img" onerror="this.src='https://via.placeholder.com/600x400?text=Upload+cert2.png'">
-                    <div class="cert-caption">Professional Video Editing</div>
-                </div>
+            
+            <div class="cert-container">
+                <img src="cert1.png" alt="AI Certification" class="cert-img" onerror="this.src='https://via.placeholder.com/800x600?text=Upload+cert1.png'">
+                <div class="cert-caption">Advanced AI & Prompt Engineering</div>
             </div>
             
             <hr>
@@ -317,28 +361,13 @@
                     </div>
                 </div>
             </div>
-            
-            <hr>
-            
-            <h2>📬 Get In Touch</h2>
-            <p style="color: #A0AEC0;">Have a project in mind or want to collaborate on 'The Wonder Why'? Send me a message!</p>
-            
-            <div class="contact-form-container">
-                <form action="https://formsubmit.co/YOUR_EMAIL_HERE" method="POST">
-                    <input type="hidden" name="_captcha" value="false">
-                    <input type="text" name="name" placeholder="Your Name" required>
-                    <input type="email" name="email" placeholder="Your Email" required>
-                    <textarea name="message" placeholder="Your Message Here" required style="height: 150px;"></textarea>
-                    <input type="submit" value="Send Message 🚀">
-                </form>
-            </div>
         </section>
 
         <section id="ai-engineering" class="page-section">
             <div class="hero-title" style="font-size: 2.5rem; margin-top: 20px;">AI & Prompt Playground</div>
             <p style="color: #f7f7f7; font-size: 1.1rem;">A deep dive into how I leverage AI tools to streamline content creation and generate high-quality outputs.</p>
             <hr>
-            <div class="two-cols">
+            <div style="display: flex; flex-direction: column; gap: 30px;">
                 <div>
                     <h3>Project: Automated TTS Voiceover Pipeline</h3>
                     <p style="color: #A0AEC0; line-height: 1.6;">Integrated advanced Text-to-Speech models to generate natural, highly engaging voiceovers for every video on 'The Wonder Why', ensuring consistent, high-quality audio across all universe exploration topics.</p>
@@ -354,7 +383,7 @@
             <div class="hero-title" style="font-size: 2.5rem; margin-top: 20px;">Video Editing Gallery</div>
             <p style="color: #f7f7f7; font-size: 1.1rem;">A collection of my creative work, blending traditional editing techniques with AI-generated audio and assets.</p>
             <hr>
-            <div class="two-cols">
+            <div style="display: flex; flex-direction: column; gap: 40px;">
                 <div>
                     <h3>The Wonder Why - Universe Facts</h3>
                     <iframe src="https://www.youtube.com/embed/tPEE9ZwTmy0" allowfullscreen></iframe>
@@ -388,27 +417,40 @@
     </main>
 
     <script>
-        // Handle Page Navigation
+        // --- Mobile Menu Toggle Logic ---
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const btn = document.getElementById('menuBtn');
+            
+            sidebar.classList.toggle('active-mobile');
+            
+            if (sidebar.classList.contains('active-mobile')) {
+                btn.innerHTML = "✖"; 
+            } else {
+                btn.innerHTML = "☰"; 
+            }
+        }
+
+        // --- Handle Page Navigation ---
         function showPage(pageId) {
-            // Hide all pages
             const pages = document.querySelectorAll('.page-section');
             pages.forEach(page => page.classList.remove('active'));
             
-            // Show targeted page
             document.getElementById(pageId).classList.add('active');
             
-            // Update Sidebar Highlights
             const navItems = document.querySelectorAll('.nav-menu li');
             navItems.forEach(item => item.classList.remove('active'));
-            
-            // Find and highlight the correct menu item based on onclick attribute
             event.currentTarget.classList.add('active');
             
-            // Scroll to top
+            if (window.innerWidth <= 900) {
+                document.getElementById('sidebar').classList.remove('active-mobile');
+                document.getElementById('menuBtn').innerHTML = "☰";
+            }
+            
             window.scrollTo(0, 0);
         }
 
-        // Handle Chatbot Logic
+        // --- Handle Chatbot Logic ---
         function handleKeyPress(event) {
             if (event.key === 'Enter') { sendChatMessage(); }
         }
@@ -420,16 +462,14 @@
             
             const chatBox = document.getElementById('chatBox');
             
-            // 1. Add User Message
             const userMsgDiv = document.createElement('div');
             userMsgDiv.className = 'chat-message user';
             userMsgDiv.innerHTML = `<div class="chat-bubble">${messageText}</div>`;
             chatBox.appendChild(userMsgDiv);
             
-            inputField.value = ''; // Clear input
-            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll
+            inputField.value = ''; 
+            chatBox.scrollTop = chatBox.scrollHeight; 
             
-            // 2. Simulate AI Typing delay, then reply
             setTimeout(() => {
                 let replyText = "";
                 const lowerMsg = messageText.toLowerCase();
@@ -445,8 +485,8 @@
                 botMsgDiv.innerHTML = `<div class="chat-bubble">${replyText}</div>`;
                 chatBox.appendChild(botMsgDiv);
                 
-                chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll again
-            }, 600); // 0.6 second delay to feel like a real bot
+                chatBox.scrollTop = chatBox.scrollHeight; 
+            }, 600); 
         }
     </script>
 </body>
